@@ -35,7 +35,7 @@ dependencies {
     // Supplies GenericObjectPoolConfig for the Lettuce pool, which today backs only the single
     // shared native connection; headroom for a future dedicated-connection path.
     implementation 'org.apache.commons:commons-pool2'
-    api 'io.swagger.core.v3:swagger-core-jakarta:2.2.53'
+    api 'io.swagger.core.v3:swagger-core-jakarta:2.2.55'
     implementation "com.bucket4j:bucket4j_jdk17-core:${bucket4jVersion}"
     // Lettuce-backed Bucket4j ProxyManager used by ValkeyRateLimitStore for cluster-wide
     // token-bucket rate limiting (parity with in-process Bucket4j semantics; no fixed-window
