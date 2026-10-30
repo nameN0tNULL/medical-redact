@@ -258,5 +258,6 @@ Info "Windows Full Offline validation package completed: version=$version"
 foreach ($artifact in $artifacts) {
     $hash = (Get-FileHash -Algorithm SHA256 $artifact.FullName).Hash.ToLowerInvariant()
     $sizeMiB = [Math]::Round($artifact.Length / 1MB, 1)
-
-[4 more lines in file. Use offset=261 to continue.]
+    Write-Host ("ARTIFACT {0} ({1} MiB)" -f $artifact.FullName, $sizeMiB)
+    Write-Host ("SHA256  {0}" -f $hash)
+}
