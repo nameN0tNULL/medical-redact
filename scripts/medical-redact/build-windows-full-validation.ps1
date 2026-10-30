@@ -28,7 +28,10 @@ function Get-JavaMajor([string]$JavaHome) {
     if (-not (Test-Path $java)) {
         return 0
     }
-    $raw = (& $java -version 2>&1 | Out-String)
+    # Windows PowerShell 5.1 promotes native stderr to NativeCommandError when
+    # ErrorActionPreference=Stop. java -version writes its normal version banner to stderr,
+    # so merge the streams inside cmd.exe before PowerShell sees them.
+    $raw = (& cmd.exe /d /c "`"$java`" -version 2>&1" | Out-String)
     $match = [regex]::Match($raw, 'version\s+"([0-9]+)')
     if (-not $match.Success) {
         return 0
