@@ -9,7 +9,46 @@ permissions:
   contents: read
 
 jobs:
+  prepare-models:
+    name: Prepare platform-neutral OCR models
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: |
+            engine/pyproject.toml
+            engine/uv.lock
+
+      - name: Install Python 3.12 converter runtime
+        run: uv python install 3.12
+
+      - name: Download, verify and convert OCR models
+        run: |
+          set -euo pipefail
+          uv run --no-project --python 3.12 --with requests engine/scripts/download_medical_redact_ocr_models.py
+          uv run --no-project --python 3.12 engine/scripts/convert_medical_redact_ocr_models_to_onnx.py
+
+          for model in             PP-LCNet_x1_0_doc_ori_infer             PP-LCNet_x1_0_textline_ori_infer             PP-OCRv6_small_det_infer             PP-OCRv6_small_rec_infer; do
+            test -s ".cache/medical-redact/models/$model/inference.onnx"
+          done
+
+      - name: Upload prepared OCR model cache
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: medical-redact-ocr-models
+          if-no-files-found: error
+          retention-days: 1
+          path: .cache/medical-redact/models/**
+
   build-windows-x64:
+    needs: prepare-models
     name: Build Windows x64 full offline installers
     runs-on: windows-latest
     timeout-minutes: 120
@@ -71,6 +110,31 @@ jobs:
         uses: go-task/setup-task@a00fbb05ce67b35648be3c78cbc9fd85354c757e # v2.2.0
         with:
           version: 3.54.0
+
+      - name: Download prepared OCR model cache
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: medical-redact-ocr-models
+          path: .cache/medical-redact/models
+
+      - name: Verify prepared OCR model cache
+        shell: pwsh
+        run: |
+          $models = @(
+            "PP-LCNet_x1_0_doc_ori_infer",
+            "PP-LCNet_x1_0_textline_ori_infer",
+            "PP-OCRv6_small_det_infer",
+            "PP-OCRv6_small_rec_infer"
+          )
+          foreach ($model in $models) {
+            $onnx = Join-Path ".cache/medical-redact/models" "$model/inference.onnx"
+            if (-not (Test-Path $onnx)) {
+              throw "Prepared OCR model is missing: $onnx"
+            }
+            if ((Get-Item $onnx).Length -le 0) {
+              throw "Prepared OCR model is empty: $onnx"
+            }
+          }
 
       - name: Cache Gradle
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
