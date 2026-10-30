@@ -137,7 +137,15 @@ def test_real_ppocrv6_multicolumn_table_and_stamp_nearby_text(
     real_ocr: OcrService,
 ) -> None:
     font_path = (
-        _REPO_ROOT / "frontend" / "node_modules" / "@embedpdf" / "fonts-sc" / "fonts" / "NotoSansHans-Regular.otf"
+        _REPO_ROOT
+        / "app"
+        / "core"
+        / "src"
+        / "main"
+        / "resources"
+        / "static"
+        / "fonts"
+        / "NotoSansSC-Regular.ttf"
     )
     font = ImageFont.truetype(str(font_path), 38)
     title_font = ImageFont.truetype(str(font_path), 46)

@@ -218,10 +218,12 @@ def _monitor_parent_process(parent_pid: int) -> None:
 
 
 def _start_parent_monitor(parent_pid: int | None) -> None:
-    if parent_pid is None or os.name != "posix":
+    if parent_pid is None:
         return
     if parent_pid <= 1:
         raise ValueError("parent pid must be greater than 1")
+    if os.name != "posix":
+        return
     threading.Thread(
         target=_monitor_parent_process,
         args=(parent_pid,),
