@@ -411,7 +411,7 @@ function validationBuild() {
 
   cleanStaging();
   const javaEnv = resolveJava25Env({ ...process.env });
-  run("task", ["desktop:prepare"], { env: javaEnv });
+  run(process.platform === "win32" ? "task.exe" : "task", ["desktop:prepare"], { env: javaEnv });
   verifyPrepared({ requireEngine: true });
 
   const env = resolveCargoPath(javaEnv);
