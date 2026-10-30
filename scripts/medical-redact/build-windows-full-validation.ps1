@@ -126,10 +126,10 @@ if (-not $SkipTests) {
     Info "Running medical Engine regression suite"
     Push-Location (Join-Path $Root "engine")
     try {
-        & uv.exe run --group engine-dev ruff check src\stirling\medical_redact tests\medical_redact
+        & uv.exe run --locked --group engine --group engine-dev ruff check src\stirling\medical_redact tests\medical_redact
         if ($LASTEXITCODE -ne 0) { throw "Engine lint failed with exit code $LASTEXITCODE" }
 
-        & uv.exe run --group engine-dev pytest -q tests\medical_redact
+        & uv.exe run --locked --group engine --group engine-dev pytest -q tests\medical_redact
         if ($LASTEXITCODE -ne 0) { throw "Engine medical-redact tests failed with exit code $LASTEXITCODE" }
     }
     finally {
@@ -258,6 +258,5 @@ Info "Windows Full Offline validation package completed: version=$version"
 foreach ($artifact in $artifacts) {
     $hash = (Get-FileHash -Algorithm SHA256 $artifact.FullName).Hash.ToLowerInvariant()
     $sizeMiB = [Math]::Round($artifact.Length / 1MB, 1)
-    Write-Host ("ARTIFACT {0} ({1} MiB)" -f $artifact.FullName, $sizeMiB)
-    Write-Host ("SHA256  {0}" -f $hash)
-}
+
+[4 more lines in file. Use offset=261 to continue.]
