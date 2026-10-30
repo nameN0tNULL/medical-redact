@@ -107,11 +107,10 @@ if (-not (Test-Path $modelMarker)) {
         & uv.exe sync --locked --group engine --group engine-package
         if ($LASTEXITCODE -ne 0) { throw "uv sync failed with exit code $LASTEXITCODE" }
 
-        $python = Join-Path $Root "engine\.venv\Scripts\python.exe"
-        & $python "scripts\download_medical_redact_ocr_models.py"
+        & uv.exe run --locked --group engine --group engine-package python "scripts\download_medical_redact_ocr_models.py"
         if ($LASTEXITCODE -ne 0) { throw "OCR model download failed with exit code $LASTEXITCODE" }
 
-        & $python "scripts\convert_medical_redact_ocr_models_to_onnx.py"
+        & uv.exe run --locked --group engine --group engine-package python "scripts\convert_medical_redact_ocr_models_to_onnx.py"
         if ($LASTEXITCODE -ne 0) { throw "OCR ONNX conversion failed with exit code $LASTEXITCODE" }
     }
     finally {
