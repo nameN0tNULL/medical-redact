@@ -1,0 +1,92 @@
+{
+  "generated": "2026-10-24",
+  "purpose": "Synthetic fixtures for medical-redaction E2E tests. No real patient data.",
+  "fake_fields": {
+    "patient_name": "测试患者甲",
+    "doctor_name": "测试医生乙",
+    "id_card": "11010119900307451X",
+    "phone": "13800000001",
+    "email": "patient.e2e@example.invalid",
+    "address": "北京市虚构区测试路88号E2E单元",
+    "outpatient_no": "MZ-20261024-0001",
+    "inpatient_no": "ZY-20261024-0007",
+    "medical_record_no": "MR-TEST-20261024-01",
+    "insurance_no": "YB-TEST-00000001",
+    "exam_no": "EXAM-CT-20261024-09",
+    "sample_no": "SAMPLE-20261024-A17"
+  },
+  "cases": [
+    {
+      "file": "01_outpatient_record_text.pdf",
+      "format": "pdf",
+      "category": "outpatient_record",
+      "pages": 2,
+      "expected_import": "accepted",
+      "variant": "native-text"
+    },
+    {
+      "file": "02_inpatient_record_text.pdf",
+      "format": "pdf",
+      "category": "inpatient_record",
+      "pages": 3,
+      "expected_import": "accepted",
+      "variant": "native-text-multipage"
+    },
+    {
+      "file": "03_lab_report_text.pdf",
+      "format": "pdf",
+      "category": "lab_report",
+      "pages": 1,
+      "expected_import": "accepted",
+      "variant": "native-text-table"
+    },
+    {
+      "file": "04_imaging_report_scan.png",
+      "format": "png",
+      "category": "imaging_report",
+      "pages": 1,
+      "expected_import": "accepted",
+      "variant": "scan-clean"
+    },
+    {
+      "file": "05_ultrasound_report_scan_rotated.png",
+      "format": "png",
+      "category": "imaging_report",
+      "pages": 1,
+      "expected_import": "accepted",
+      "variant": "scan-rotated"
+    },
+    {
+      "file": "06_lab_slip_low_contrast.png",
+      "format": "png",
+      "category": "lab_report",
+      "pages": 1,
+      "expected_import": "accepted",
+      "variant": "scan-low-contrast"
+    },
+    {
+      "file": "07_outpatient_record_word.docx",
+      "format": "docx",
+      "category": "outpatient_record",
+      "pages": null,
+      "expected_import": "rejected-p0",
+      "variant": "word-native"
+    },
+    {
+      "file": "08_imaging_report_word.docx",
+      "format": "docx",
+      "category": "imaging_report",
+      "pages": null,
+      "expected_import": "rejected-p0",
+      "variant": "word-native"
+    },
+    {
+      "file": "09_lab_report_word.docx",
+      "format": "docx",
+      "category": "lab_report",
+      "pages": null,
+      "expected_import": "rejected-p0",
+      "variant": "word-table-like"
+    }
+  ]
+}

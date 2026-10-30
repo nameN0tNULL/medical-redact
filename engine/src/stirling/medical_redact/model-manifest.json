@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "activeBackend": "medical-zh-context-v1",
+  "backends": {
+    "medical-zh-context-v1": {
+      "adapter": "builtin-context",
+      "modelId": "medical-zh-context-ner-v1",
+      "device": "cpu"
+    }
+  }
+}

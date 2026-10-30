@@ -1,0 +1,79 @@
+version: '3'
+
+tasks:
+  engine:package:
+    desc: "Build and stage the offline medical AI Engine and verified models"
+    cmds:
+      - node scripts/medical-redact/build-engine-sidecar.mjs build
+
+  engine:verify:
+    desc: "Verify the staged medical AI Engine and model bundle"
+    cmds:
+      - node scripts/medical-redact/build-engine-sidecar.mjs verify
+
+  models:onnx:
+    desc: "Convert medical-redact OCR models to ONNX for local accelerated inference"
+    cmds:
+      - cd engine && uv run python scripts/convert_medical_redact_ocr_models_to_onnx.py {{.CLI_ARGS}}
+
+  package:validation:
+    desc: "Build the medical-redact desktop validation package for the current OS"
+    cmds:
+      - node scripts/medical-redact/package-desktop.mjs validation
+
+  package:macos:validation:
+    desc: "Build unsigned macOS .app + .dmg for medical-redact manual validation"
+    platforms: [darwin]
+    cmds:
+      - node scripts/medical-redact/package-desktop.mjs validation --platform=macos
+
+  package:windows:validation:
+    desc: "Build unsigned Windows NSIS + MSI installers for medical-redact manual validation"
+    platforms: [windows]
+    cmds:
+      - node scripts/medical-redact/package-desktop.mjs validation --platform=windows
+
+  package:windows:full-validation:
+    desc: "Build the complete Windows x64 Full Offline validation package, including Engine/models/JRE/backend"
+    platforms: [windows]
+    cmds:
+      - powershell -NoProfile -ExecutionPolicy Bypass -File scripts/medical-redact/build-windows-full-validation.ps1
+
+  package:preflight:
+    desc: "Verify staged backend JAR and bundled Java runtime for medical-redact"
+    cmds:
+      - node scripts/medical-redact/package-desktop.mjs preflight
+
+  package:release:preflight:
+    desc: "Full offline release preflight; also requires packaged medical AI Engine"
+    cmds:
+      - node scripts/medical-redact/package-desktop.mjs release-preflight
+
+  package:macos:sign-engine:
+    desc: "Sign every nested macOS Engine Mach-O with one identity, then harden the Engine executable"
+    platforms: [darwin]
+    cmds:
+      - node scripts/medical-redact/sign-macos-engine.mjs {{.CLI_ARGS}}
+
+  package:macos:sign-engine:verify:
+    desc: "Verify macOS Engine nested code has one Team ID and hardened runtime"
+    platforms: [darwin]
+    cmds:
+      - node scripts/medical-redact/sign-macos-engine.mjs --verify-only
+
+  package:macos:signed:validation:
+    desc: "Build host-native macOS .app + .dmg with signed/hardened Engine for release-path validation"
+    platforms: [darwin]
+    cmds:
+      - node scripts/medical-redact/package-desktop.mjs signed-validation --platform=macos
+
+  package:macos:universal:preflight:
+    desc: "Verify Rosetta, dual Rust/JDK toolchains, and x86_64 Engine dependency availability"
+    platforms: [darwin]
+    cmds:
+      - node scripts/medical-redact/verify-macos-universal-prereqs.mjs
+
+  package:verify:
+    desc: "Verify expected medical-redact package artifacts for the current OS"
+    cmds:
+      - node scripts/medical-redact/package-desktop.mjs verify

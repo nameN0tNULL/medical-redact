@@ -1,0 +1,44 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+
+  categories:
+    - title: Breaking Changes
+      labels:
+        - break-change
+
+    - title: Bug Fixes
+      labels:
+        - Bugfix
+        - Bug
+
+    - title: Enhancements
+      labels:
+        - enhancement
+        - Java
+        - Front End
+        - Back End
+        - Tauri
+
+    - title: Minor Enhancements
+      labels:
+        - chore
+        - style
+        - refactor
+
+    - title: Docker Updates
+      labels:
+        - Docker
+
+    - title: Translation Changes
+      labels:
+        - Translation
+
+    - title: Development Tools
+      labels:
+        - Devtools
+
+    - title: Other Changes
+      labels:
+        - "*"

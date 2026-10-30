@@ -1,0 +1,28 @@
+# Review ownership is assigned to teams where possible.
+# Teams can only contain org members, so outside collaborators are listed by hand.
+#
+#   @Stirling-Tools/maintainers          - Frooodle, jbrunton96, ConnorYoh
+#   @Stirling-Tools/backend-reviewers    - Frooodle, jbrunton96, ConnorYoh
+#   @Stirling-Tools/frontend-reviewers   - Frooodle, jbrunton96, ConnorYoh, reecebrowne, EthanHealy01
+#   @Stirling-Tools/devops-reviewers     - Frooodle, jbrunton96, ConnorYoh
+#   @Stirling-Tools/all                  - all of the above
+#
+# Outside collaborators (need Write access to count as owners): @Ludy87 @balazs-szucs
+
+# Default owners for everything
+* @Stirling-Tools/maintainers @Ludy87
+
+# Backend
+/app/** @Stirling-Tools/backend-reviewers @Ludy87 @balazs-szucs
+
+# V2 frontend
+/frontend/** @Stirling-Tools/frontend-reviewers @balazs-szucs
+/app/core/src/main/resources/static/** @Stirling-Tools/frontend-reviewers @Ludy87 @balazs-szucs
+
+# V2 docker
+/docker/backend/** @Stirling-Tools/devops-reviewers @Ludy87
+/docker/frontend/** @Stirling-Tools/frontend-reviewers @Stirling-Tools/devops-reviewers @Ludy87
+/docker/compose/** @Stirling-Tools/frontend-reviewers @Stirling-Tools/devops-reviewers @Ludy87
+
+# GHA (all users)
+/.github/** @Stirling-Tools/all @Ludy87 @balazs-szucs

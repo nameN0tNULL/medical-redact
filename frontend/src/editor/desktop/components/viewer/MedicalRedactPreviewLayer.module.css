@@ -1,0 +1,58 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.region {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 0;
+  border: 1px solid var(--c-border-strong);
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.45;
+  pointer-events: auto;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease,
+    opacity 120ms ease;
+}
+
+.region:hover,
+.region:focus-visible {
+  border-color: var(--c-accent-fg, var(--c-primary));
+  background: var(--c-primary-subtle);
+  opacity: 1;
+  outline: none;
+}
+
+.region[data-selected="true"] {
+  border-color: black;
+  background: black;
+  opacity: 1;
+}
+
+.manualHitbox {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.finalBox {
+  position: absolute;
+  background: black;
+}
+
+.verificationFocus {
+  position: absolute;
+  box-sizing: border-box;
+  border: 3px solid var(--mantine-color-red-6);
+  background: color-mix(in srgb, var(--mantine-color-red-6) 16%, transparent);
+  pointer-events: none;
+}
