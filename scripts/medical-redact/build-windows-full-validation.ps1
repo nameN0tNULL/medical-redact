@@ -74,6 +74,13 @@ if (-not (($env:PATH -split ';') -contains $cargoDir)) {
 Info "Rust cargo resolved at $cargo"
 
 $versionFile = Join-Path $Root "app\common\src\main\resources\version.properties"
+if (-not (Test-Path $versionFile)) {
+    Info "Generating version.properties with Gradle"
+    & cmd.exe /d /c "gradlew.bat writeVersion --no-daemon"
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gradle writeVersion failed with exit code $LASTEXITCODE"
+    }
+}
 $versionMatch = [regex]::Match((Get-Content $versionFile -Raw), '(?m)^version=(.+)$')
 if (-not $versionMatch.Success) {
     throw "Unable to read application version from $versionFile"
